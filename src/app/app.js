@@ -1,4 +1,5 @@
 const express = require('express')
+const repository = require('../repository/repository')
 
 module.exports = (server) => {
     const router = express.Router()
@@ -15,21 +16,21 @@ module.exports = (server) => {
 }
 
 function addPlanet(req, res){
-    res.send("add funciona!")
+    repository.save(req.query)
 }
 
 function getList(req, res){
-    res.send("list funciona!")
+    repository.getList(res)
 }
 
 function getById(req, res){
-    res.send("getById funciona!")
+    repository.findById(req.query.id, res)
 }
 
 function getByName(req, res){
-    res.send("getByName funciona!")
+    repository.findByName(req.query.nome, res)
 }
 
 function deletePlanet(req, res){
-    res.send("delete funciona!")
+   repository.delete(req.query.nome, res)
 }
