@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient
 const uri = 'mongodb://localhost:27017/planetsdb'
+const nanoid = require('nanoid')
 
 module.exports = {
     save : (data) => {
@@ -14,12 +15,26 @@ module.exports = {
                 throw err
             }
             const db = client.db('planetsdb')
-            db.collection('planets').insertOne(data, (err, result) => {
-                if(err){
-                    console.log(err)
-                    throw err
+            db.collection('planets')
+            .findOneAndUpdate({name: data.name},
+                {
+                    $setOnInsert: {
+                        planetSearchId: nanoid(5),
+                        name: data.name,
+                        climate: data.climate,
+                        terrain: data.terrain,
+                        numberOfFilms: data.numberOfFilms
+                    },
+                },
+                {
+                    returnOriginal: false,
+                    upsert: true,
                 }
+            ).then(
                 console.log('data successfully saved!')
+            ).catch(error => {
+                console.log(error)
+                throw error
             })
           })
     },
@@ -86,7 +101,7 @@ module.exports = {
                 throw err
             }
             const db = client.db('planetsdb')
-            db.collection('planets').find({_id: id},(err, result) => {
+            db.collection('planets').find({planetSearchId: id}).toArray((err, result) => {
                 if(err){
                     console.log(err)
                     throw err
