@@ -4,7 +4,8 @@
   "description": "Desafio API Planetas de Star Wars",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
